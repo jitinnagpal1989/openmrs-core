@@ -19,6 +19,7 @@ import org.openmrs.User;
 import org.openmrs.annotation.Logging;
 import org.openmrs.api.context.Context;
 import org.openmrs.util.OpenmrsUtil;
+import org.openmrs.util.Security;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,7 +102,12 @@ public class LoggingAdvice implements MethodInterceptor {
 					if (argsToIgnore.contains(x)) {
 						output.append("<Arg value ignored>");
 					} else {
-						output.append(values[x]);
+						if (types[x].getSimpleName().equalsIgnoreCase("User")) {
+							output.append(Security.encrypt(values[x].toString()));
+						}else{
+							output.append(values[x]);
+						}
+						
 					}
 					
 					output.append(", ");
